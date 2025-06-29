@@ -1,0 +1,17 @@
+{
+  "name": "adunblock/server-tag-symfony",
+  "description": "A Symfony package to fetch and render scripts from a remote URL.",
+  "type": "symfony-bundle",
+  "license": "ISC",
+  "autoload": {
+    "psr-4": {
+      "Adunblock\\ServerTag\\Symfony\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "symfony/http-client": "^5.0|^6.0",
+    "symfony/cache": "^5.0|^6.0",
+    "twig/twig": "^2.0|^3.0"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "@adunblock/server-tag-nextjs",
+  "version": "1.0.0",
+  "description": "A Next.js/React component for server-side script loading and rendering",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && tsc && tsc -p tsconfig.esm.json && npm run build:rename",
+    "build:rename": "cp dist/esm/index.js dist/index.esm.js",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf dist",
+    "dev": "cd test-app && next dev",
+    "test:build": "cd test-app && next build",
+    "test:start": "cd test-app && next start",
+    "test:lint": "cd test-app && next lint",
+    "test:e2e": "playwright test"
+  },
+  "keywords": [
+    "nextjs",
+    "react",
+    "server-side",
+    "script-loading",
+    "typescript"
+  ],
+  "author": "Adunblock",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adunblock/server-tag"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "next": ">=12.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/node": "^20",
+    "typescript": "^5",
+    "react": "^19",
+    "react-dom": "^19",
+    "next": "15.3.4",
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.4",
+    "playwright": "^1.53.1"
+  }
+}

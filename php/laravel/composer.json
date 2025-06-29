@@ -1,0 +1,16 @@
+{
+  "name": "adunblock/server-tag-laravel",
+  "description": "A Laravel package to fetch and render scripts from a remote URL.",
+  "type": "laravel-package",
+  "license": "ISC",
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "require": {
+    "php": ">=7.4",
+    "illuminate/support": "^8.0|^9.0|^10.0",
+    "illuminate/http": "^8.0|^9.0|^10.0"
+  }
+}

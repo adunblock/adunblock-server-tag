@@ -1,0 +1,25 @@
+# Source files
+src/
+tsconfig*.json
+
+# Development files
+test-app/
+node_modules/
+.git/
+.gitignore
+
+# Build artifacts
+*.tsbuildinfo
+
+# Development configs
+.eslintrc*
+.prettierrc*
+
+# Documentation (keep README.md)
+CLAUDE.md
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
