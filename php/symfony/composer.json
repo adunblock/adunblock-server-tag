@@ -1,8 +1,28 @@
 {
   "name": "adunblock/server-tag-symfony",
-  "description": "A Symfony package to fetch and render scripts from a remote URL.",
+  "description": "A Symfony bundle to fetch and render scripts from a remote URL with Twig integration and caching support.",
   "type": "symfony-bundle",
   "license": "ISC",
+  "keywords": [
+    "symfony",
+    "php",
+    "server-tag",
+    "script-loading",
+    "remote-scripts",
+    "twig",
+    "bundle"
+  ],
+  "homepage": "https://github.com/adunblock/adunblock-server-tag",
+  "authors": [
+    {
+      "name": "Adunblock",
+      "email": "dev@adunblock.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/adunblock/adunblock-server-tag/issues",
+    "source": "https://github.com/adunblock/adunblock-server-tag"
+  },
   "autoload": {
     "psr-4": {
       "Adunblock\\ServerTag\\Symfony\\": "src/"
@@ -10,8 +30,12 @@
   },
   "require": {
     "php": ">=7.4",
-    "symfony/http-client": "^5.0|^6.0",
-    "symfony/cache": "^5.0|^6.0",
+    "symfony/http-client": "^5.0|^6.0|^7.0",
+    "symfony/cache": "^5.0|^6.0|^7.0",
+    "symfony/dependency-injection": "^5.0|^6.0|^7.0",
+    "symfony/http-kernel": "^5.0|^6.0|^7.0",
     "twig/twig": "^2.0|^3.0"
-  }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

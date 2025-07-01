@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Twig;
+namespace Adunblock\ServerTag\Symfony\Twig;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class ServerTagExtension extends AbstractExtension
+class AdunblockExtension extends AbstractExtension
 {
     private $httpClient;
     private $cache;

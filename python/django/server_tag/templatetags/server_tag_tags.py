@@ -25,6 +25,7 @@ def server_tag(remote_url, cache_interval=300, render_script=None):
     if render_script:
         return mark_safe(render_script(js_files))
     else:
-        scripts = [f'<script src="{src}" async></script>' for src in js_files.get('js', [])]
+        from django.utils.html import escape
+        scripts = [f'<script src="{escape(src)}" async></script>' for src in js_files.get('js', [])]
         return mark_safe('\n'.join(scripts))
 

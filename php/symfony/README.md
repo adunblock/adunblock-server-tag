@@ -1,15 +1,25 @@
-# adunblock-server-tag for Symfony
+# Server Tag Symfony Bundle
 
-This package provides a Twig extension to fetch and render scripts from a remote URL in your Symfony Twig templates.
+A Symfony bundle to fetch and render scripts from a remote URL with Twig integration and caching support.
 
 ## Installation
 
-1.  Copy the `src/Twig/ServerTagExtension.php` file into your Symfony project, for example, in the `src/Twig` directory.
-2.  Symfony's autowiring will automatically recognize the new Twig extension. Make sure you have the necessary dependencies installed:
+Install the bundle via Composer:
 
-    ```bash
-    composer require symfony/http-client symfony/cache
-    ```
+```bash
+composer require adunblock/server-tag-symfony
+```
+
+Enable the bundle in your `config/bundles.php`:
+
+```php
+<?php
+
+return [
+    // ... other bundles
+    Adunblock\ServerTag\Symfony\AdunblockServerTagBundle::class => ['all' => true],
+];
+```
 
 ## Usage
 
@@ -30,51 +40,32 @@ In your Twig template, you can now use the `server_tag` function:
 
 ### Custom Rendering
 
-You can provide a custom Twig function to the `render_script` argument to render the script tags in a different way. This function should be defined in a Twig extension.
-
-**Example:**
-
-In a file `src/Twig/AppExtension.php`:
-
-```php
-<?php
-
-namespace App\Twig;
-
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-
-class AppExtension extends AbstractExtension
-{
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('my_script_renderer', [$this, 'myScriptRenderer'], ['is_safe' => ['html']]),
-        ];
-    }
-
-    public function myScriptRenderer(array $jsFiles): string
-    {
-        $scripts = array_map(function ($src) {
-            return sprintf('<script src="%s" defer></script>', htmlspecialchars($src, ENT_QUOTES, 'UTF-8'));
-        }, $jsFiles['js'] ?? []);
-
-        return implode("\n", $scripts);
-    }
-}
-```
-
-In your Twig template:
+You can provide a custom callable to the `render_script` parameter to customize how script tags are rendered:
 
 ```twig
 <!DOCTYPE html>
 <html>
 <head>
   <title>My Page</title>
-  {{ server_tag('https://your-remote-url.com/scripts.json', 300, my_script_renderer) }}
+  {{ server_tag('https://your-remote-url.com/scripts.json', 300, custom_renderer) }}
 </head>
 <body>
   <h1>My Page</h1>
 </body>
 </html>
 ```
+
+## Features
+
+- **Twig Integration**: Easy-to-use Twig function for templates
+- **HTTP Client**: Uses Symfony's HTTP client for reliable requests
+- **Caching**: Built-in caching support with configurable TTL
+- **Error Handling**: Graceful error handling with fallback to empty arrays
+- **Security**: XSS protection with proper HTML escaping
+- **Bundle Structure**: Proper Symfony bundle with dependency injection
+
+## Requirements
+
+- PHP 7.4 or higher
+- Symfony 5.0, 6.0, or 7.0
+- Twig 2.0 or 3.0

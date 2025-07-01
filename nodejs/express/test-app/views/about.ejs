@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  
+  <!-- ServerTag scripts injected here -->
+  <%- serverTagHtml %>
+  
+  <style>
+    body { 
+      font-family: system-ui, sans-serif; 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      padding: 20px; 
+      background: #f8f9fa;
+      line-height: 1.6;
+    }
+    .container { 
+      background: white; 
+      padding: 30px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+    }
+    nav { 
+      margin-bottom: 30px; 
+      padding-bottom: 15px; 
+      border-bottom: 2px solid #e9ecef; 
+    }
+    nav a { 
+      margin-right: 20px; 
+      color: #0066cc; 
+      text-decoration: none; 
+      font-weight: 500;
+    }
+    nav a:hover { 
+      text-decoration: underline; 
+    }
+    .info-box { 
+      background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); 
+      color: white;
+      padding: 25px; 
+      border-radius: 10px; 
+      margin: 25px 0; 
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .feature-card {
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .code-inline {
+      background: #f1f3f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+    h1 { color: #2c3e50; margin-bottom: 10px; }
+    h2 { color: #34495e; margin-top: 30px; }
+    .script-status {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/">🏠 Home</a>
+      <a href="/about">📖 About</a>
+      <a href="/manual">🔧 Manual Injection</a>
+      <a href="/auto">🚀 Auto Injection</a>
+      <a href="/api/scripts">📊 Scripts API</a>
+    </nav>
+
+    <h1>📖 About ServerTag Express Middleware</h1>
+    <p><%= description %></p>
+
+    <div class="info-box">
+      <h2>🎯 What Problem Does It Solve?</h2>
+      <p>Many web applications need to dynamically load external scripts based on server-side configuration. ServerTag eliminates the need for client-side script loading by fetching and injecting scripts on the server, improving performance and reducing client-side complexity.</p>
+    </div>
+
+    <div class="script-status">
+      <h3>📊 Current Script Status</h3>
+      <p><strong>Scripts Currently Loaded:</strong> <%= scripts.length %></p>
+      <% if (scripts.length > 0) { %>
+        <details>
+          <summary>View Script URLs</summary>
+          <ul style="margin: 10px 0;">
+            <% scripts.forEach(script => { %>
+              <li><code><%= script %></code></li>
+            <% }); %>
+          </ul>
+        </details>
+      <% } else { %>
+        <p><em>No scripts loaded from the remote endpoint.</em></p>
+      <% } %>
+    </div>
+
+    <h2>🔧 Integration Methods</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>🎪 Template Integration</h3>
+        <p>Use <code class="code-inline">serverTagHtml</code> in your templates:</p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;"><%- serverTagHtml %></pre>
+      </div>
+
+      <div class="feature-card">
+        <h3>🔧 Manual Injection</h3>
+        <p>Programmatically inject scripts:</p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;">const html = injectScripts(
+  originalHtml, 
+  res.locals.serverTagScripts
+);</pre>
+      </div>
+
+      <div class="feature-card">
+        <h3>🚀 Auto Injection</h3>
+        <p>Automatically inject into HTML responses:</p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;">serverTagMiddleware({
+  injectIntoHtml: true
+})</pre>
+      </div>
+
+      <div class="feature-card">
+        <h3>📊 Direct Access</h3>
+        <p>Access script data directly:</p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;">const scripts = 
+  res.locals.serverTagScripts;</pre>
+      </div>
+    </div>
+
+    <h2>⚙️ Configuration Options</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Option</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>remoteUrl</code></td>
+          <td>String</td>
+          <td>Required</td>
+          <td>URL to fetch script configuration from</td>
+        </tr>
+        <tr>
+          <td><code>cacheInterval</code></td>
+          <td>Number</td>
+          <td>300</td>
+          <td>Cache duration in seconds</td>
+        </tr>
+        <tr>
+          <td><code>injectIntoHtml</code></td>
+          <td>Boolean</td>
+          <td>true</td>
+          <td>Auto-inject scripts into HTML responses</td>
+        </tr>
+        <tr>
+          <td><code>injectPosition</code></td>
+          <td>String</td>
+          <td>'&lt;/head&gt;'</td>
+          <td>Where to inject scripts in HTML</td>
+        </tr>
+        <tr>
+          <td><code>scriptAttributes</code></td>
+          <td>Object</td>
+          <td>{async: true}</td>
+          <td>Additional attributes for script tags</td>
+        </tr>
+        <tr>
+          <td><code>onError</code></td>
+          <td>Function</td>
+          <td>undefined</td>
+          <td>Custom error handler</td>
+        </tr>
+        <tr>
+          <td><code>shouldInject</code></td>
+          <td>Function</td>
+          <td>() => true</td>
+          <td>Conditional injection logic</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>🎪 Usage Examples</h2>
+    <div style="background: #2d3748; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 14px; overflow-x: auto;">
+// Basic usage
+app.use(serverTagMiddleware({
+  remoteUrl: 'https://config.example.com/scripts.json'
+}));
+
+// Advanced configuration
+app.use(serverTagMiddleware({
+  remoteUrl: 'https://config.example.com/scripts.json',
+  cacheInterval: 600, // 10 minutes
+  scriptAttributes: { defer: true },
+  shouldInject: (req, res) => !req.path.startsWith('/api/'),
+  onError: (error, req, res) => {
+    console.error('Script loading failed:', error.message);
+  }
+}));
+
+// Route-specific usage
+app.get('/special', serverTagMiddleware({
+  remoteUrl: 'https://config.example.com/special-scripts.json',
+  injectIntoHtml: true
+}), (req, res) => {
+  res.send('&lt;html&gt;...&lt;/html&gt;');
+});
+    </div>
+
+    <h2>🔗 Learn More</h2>
+    <p>Explore different integration patterns:</p>
+    <ul>
+      <li><a href="/manual">🔧 Manual Injection Example</a> - See how to manually inject scripts</li>
+      <li><a href="/auto">🚀 Auto Injection Example</a> - Experience automatic script injection</li>
+      <li><a href="/api/scripts">📊 Scripts API</a> - Access script data via JSON API</li>
+      <li><a href="/health">💚 Health Check</a> - Monitor ServerTag status</li>
+    </ul>
+
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; text-align: center;">
+      <p>Express ServerTag Middleware • Version 1.0.0</p>
+    </footer>
+  </div>
+</body>
+</html> 

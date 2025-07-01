@@ -1,26 +1,16 @@
-# adunblock-server-tag for Laravel
+# Server Tag Laravel Package
 
-This package provides a global helper function to fetch and render scripts from a remote URL in your Laravel Blade templates.
+A Laravel package to fetch and render scripts from a remote URL with caching support.
 
 ## Installation
 
-1.  Copy the `src/helpers.php` file into your Laravel project, for example, in the `app` directory.
-2.  Open your `composer.json` file and add the path to the `helpers.php` file in the `autoload` section:
+Install the package via Composer:
 
-    ```json
-    "autoload": {
-        "psr-4": {
-            "App\": "app/",
-            "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
-        },
-        "files": [
-            "app/helpers.php"
-        ]
-    },
-    ```
+```bash
+composer require adunblock/server-tag-laravel
+```
 
-3.  Run `composer dump-autoload` to autoload the helper file.
+The package will be automatically registered via Laravel's package auto-discovery feature.
 
 ## Usage
 

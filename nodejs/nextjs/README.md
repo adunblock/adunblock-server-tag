@@ -1,70 +1,166 @@
-# @adunblock/server-tag for Next.js
+# @adunblock/server-tag-nextjs
 
-This package provides a React Server Component to fetch and render scripts from a remote URL before the page is rendered on the server.
+A Next.js React Server Component for fetching and rendering external JavaScript files on the server-side before page rendering. This package provides secure, cached script loading with TypeScript support.
+
+## Features
+
+- 🚀 **Server-Side Rendering**: Scripts are fetched and rendered on the server before page load
+- 🔒 **Security**: Built-in URL validation (HTTP/HTTPS only)
+- ⚡ **Caching**: Configurable cache interval to reduce remote requests
+- 🎯 **Custom Rendering**: Override default script rendering with custom callbacks
+- 📘 **TypeScript**: Full TypeScript support with proper type definitions
+- ✅ **Next.js 15**: Built for Next.js 15+ with React 19 support
 
 ## Installation
 
-Copy the `ServerTag.tsx` file into your Next.js project.
+```bash
+npm install @adunblock/server-tag-nextjs
+```
 
 ## Usage
 
-Import the `ServerTag` component into your page or layout:
+### Basic Usage
 
-```jsx
-import ServerTag from './ServerTag';
+Import and use the `ServerTag` component in your Next.js pages or layouts:
 
-const MyPage = () => {
+```tsx
+import ServerTag from '@adunblock/server-tag-nextjs';
+
+export default function MyPage() {
   return (
     <div>
-      <ServerTag remoteUrl="https://your-remote-url.com/scripts.json" />
-      <h1>My Page</h1>
+      <ServerTag remoteUrl="https://your-domain.com/scripts.json" />
+      <h1>My Page Content</h1>
     </div>
   );
-};
-
-export default MyPage;
+}
 ```
 
-### Custom Rendering
+### Expected Remote Response Format
 
-You can provide a custom `renderScript` callback to render the script tags in a different way:
+The remote URL should return a JSON response in this format:
 
-```jsx
-import ServerTag from './ServerTag';
+```json
+{
+  "js": [
+    "https://example.com/script1.js",
+    "https://example.com/script2.js"
+  ]
+}
+```
 
-const MyPage = () => {
+### Advanced Usage with Custom Caching
+
+```tsx
+import ServerTag from '@adunblock/server-tag-nextjs';
+
+export default function MyPage() {
   return (
     <div>
       <ServerTag
-        remoteUrl="https://your-remote-url.com/scripts.json"
-        renderScript={({ js }) =>
-          js.map((src) => <script key={src} src={src} strategy="lazyOnload" />)
-        }
+        remoteUrl="https://your-domain.com/scripts.json"
+        cacheInterval={600} // Cache for 10 minutes (default: 300 seconds)
       />
-      <h1>My Page</h1>
+      <h1>My Page Content</h1>
     </div>
   );
-};
-
-export default MyPage;
+}
 ```
 
-## Local Testing
+### Custom Script Rendering
 
-To test the `ServerTag` component locally, navigate to the `test-app` directory and run the Next.js development server:
+Override the default script rendering with a custom callback:
+
+```tsx
+import ServerTag from '@adunblock/server-tag-nextjs';
+import Script from 'next/script';
+
+export default function MyPage() {
+  return (
+    <div>
+      <ServerTag
+        remoteUrl="https://your-domain.com/scripts.json"
+        renderScript={({ js }) =>
+          js.map((src) => (
+            <Script 
+              key={src} 
+              src={src} 
+              strategy="lazyOnload"
+              onLoad={() => console.log(`Loaded: ${src}`)}
+            />
+          ))
+        }
+      />
+      <h1>My Page Content</h1>
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `remoteUrl` | `string` | Required | The URL to fetch script URLs from |
+| `cacheInterval` | `number` | `300` | Cache duration in seconds |
+| `renderScript` | `function` | `undefined` | Custom script rendering function |
+
+### Types
+
+```typescript
+interface ServerTagProps {
+  remoteUrl: string;
+  cacheInterval?: number;
+  renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;
+}
+```
+
+## Development
+
+### Local Testing
 
 ```bash
-cd test-app
+# Install dependencies
 npm install
+
+# Run development server
 npm run dev
+
+# Build the package
+npm run build
+
+# Run E2E tests
+npm run test:e2e
 ```
 
-Then, open your browser to `http://localhost:3000`.
+### Project Structure
 
-## End-to-End Testing with Playwright
-
-To run the E2E tests, ensure the Next.js development server is running (as described above), then in a new terminal, navigate to the `test-app` directory and run:
-
-```bash
-npx playwright test
 ```
+nodejs/nextjs/
+├── src/
+│   ├── ServerTag.tsx    # Main component
+│   └── index.ts         # Package entry point
+├── test-app/            # Next.js test application
+├── e2e/                 # Playwright E2E tests
+└── dist/                # Built package files
+```
+
+## Security
+
+- Only HTTP and HTTPS URLs are allowed
+- Server-side execution prevents client-side script injection
+- URL validation prevents malicious protocol usage
+
+## Browser Compatibility
+
+This package works with all browsers supported by Next.js 15+ and React 19.
+
+## License
+
+ISC
+
+## Repository
+
+https://github.com/adunblock/adunblock-server-tag

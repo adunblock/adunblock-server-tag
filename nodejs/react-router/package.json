@@ -1,17 +1,52 @@
 {
   "name": "@adunblock/server-tag-react-router",
   "version": "1.0.0",
-  "main": "ServerTag.js",
+  "description": "A React Router component for client-side script loading and rendering",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && tsc && tsc -p tsconfig.esm.json",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf dist",
+    "dev": "cd test-app-framework-mode && npm run dev",
+    "test:build": "cd test-app-framework-mode && npm run build",
+    "test:start": "cd test-app-framework-mode && npm run start",
+    "test:e2e": "cd test-app-framework-mode && npm run test:e2e"
+  },
+  "keywords": [
+    "react",
+    "react-router",
+    "client-side",
+    "script-loading",
+    "typescript"
+  ],
+  "author": "Adunblock",
   "license": "ISC",
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "react-router-dom": "^6"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adunblock/adunblock-server-tag.git"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-router-dom": ">=6.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@types/react-router-dom": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
     "typescript": "^5"
   }
 }

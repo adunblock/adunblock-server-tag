@@ -1,16 +1,48 @@
 {
   "name": "adunblock/server-tag-laravel",
-  "description": "A Laravel package to fetch and render scripts from a remote URL.",
-  "type": "laravel-package",
+  "description": "A Laravel package to fetch and render scripts from a remote URL with caching support.",
+  "type": "library",
   "license": "ISC",
+  "keywords": [
+    "laravel",
+    "php",
+    "server-tag",
+    "script-loading",
+    "remote-scripts",
+    "blade",
+    "helper"
+  ],
+  "homepage": "https://github.com/adunblock/adunblock-server-tag",
+  "authors": [
+    {
+      "name": "Adunblock",
+      "email": "dev@adunblock.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/adunblock/adunblock-server-tag/issues",
+    "source": "https://github.com/adunblock/adunblock-server-tag"
+  },
   "autoload": {
+    "psr-4": {
+      "Adunblock\\ServerTagLaravel\\": "src/"
+    },
     "files": [
       "src/helpers.php"
     ]
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Adunblock\\ServerTagLaravel\\ServerTagServiceProvider"
+      ]
+    }
+  },
   "require": {
     "php": ">=7.4",
-    "illuminate/support": "^8.0|^9.0|^10.0",
-    "illuminate/http": "^8.0|^9.0|^10.0"
-  }
+    "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+    "illuminate/http": "^8.0|^9.0|^10.0|^11.0"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

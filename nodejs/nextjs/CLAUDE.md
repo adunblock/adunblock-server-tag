@@ -1,43 +1,61 @@
-# Next.js Server Tag Package
+# @adunblock/server-tag-nextjs
 
 ## Overview
-This is a Next.js/React TypeScript package for server-side script loading and rendering.
+A Next.js/React TypeScript package that provides a React Server Component for fetching and rendering external JavaScript files on the server-side before page rendering.
 
 ## Tech Stack
-- **Framework**: Next.js 14
+- **Framework**: Next.js 15.3.4
 - **Language**: TypeScript 5
-- **Runtime**: React 18
+- **Runtime**: React 19
+
+## Core Features
+- Server-side script fetching with built-in caching
+- Secure URL validation (HTTP/HTTPS only)
+- Custom script rendering support
+- TypeScript support
+- React Server Component architecture
 
 ## Development Commands
 ```bash
 # Install dependencies
 npm install
 
+# Build the package
+npm run build
+
 # Development server (test app)
-cd test-app && npm run dev
+npm run dev
 
-# Build
-cd test-app && npm run build
+# Build test app
+npm run test:build
 
-# Lint
-cd test-app && npm run lint
+# Start test app
+npm run test:start
+
+# Lint test app
+npm run test:lint
 
 # Type check
 npx tsc --noEmit
-```
 
-## Testing
-```bash
 # E2E tests with Playwright
-cd test-app && npx playwright test
+npm run test:e2e
 ```
 
 ## Key Files
-- `ServerTag.tsx` - Main component
+- `src/ServerTag.tsx` - Main React Server Component
+- `src/index.ts` - Package entry point
 - `test-app/` - Next.js test application
-- `test-app/e2e/` - Playwright E2E tests
+- `e2e/` - Playwright E2E tests
+- `dist/` - Built package files
+
+## Package Information
+- **Name**: @adunblock/server-tag-nextjs
+- **Version**: 1.0.0
+- **Repository**: https://github.com/adunblock/adunblock-server-tag
+- **License**: ISC
 
 ## Dependencies
-- React 18 with TypeScript support
-- Next.js 14 for SSR/SSG capabilities
+- React 19 with TypeScript support
+- Next.js 15.3.4 for SSR/SSG capabilities
 - Playwright for E2E testing

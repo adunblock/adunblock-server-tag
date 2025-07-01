@@ -39,7 +39,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adunblock/server-tag"
+    "url": "git+https://github.com/adunblock/server-tag.git"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -48,6 +48,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/node": "^20",

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  
+  <!-- ServerTag scripts injected here -->
+  <%- serverTagHtml %>
+  
+  <style>
+    body { 
+      font-family: system-ui, sans-serif; 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      padding: 20px; 
+      background: #f8f9fa;
+      line-height: 1.6;
+    }
+    .container { 
+      background: white; 
+      padding: 30px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+    }
+    nav { 
+      margin-bottom: 30px; 
+      padding-bottom: 15px; 
+      border-bottom: 2px solid #e9ecef; 
+    }
+    nav a { 
+      margin-right: 20px; 
+      color: #0066cc; 
+      text-decoration: none; 
+      font-weight: 500;
+    }
+    nav a:hover { 
+      text-decoration: underline; 
+    }
+    .demo-box { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color: white;
+      padding: 25px; 
+      border-radius: 10px; 
+      margin: 25px 0; 
+    }
+    .feature-box {
+      background: #f8f9fa;
+      border-left: 4px solid #28a745;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+    .script-list {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    h1 { color: #2c3e50; margin-bottom: 10px; }
+    h2 { color: #34495e; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/">🏠 Home</a>
+      <a href="/about">📖 About</a>
+      <a href="/manual">🔧 Manual Injection</a>
+      <a href="/auto">🚀 Auto Injection</a>
+      <a href="/api/scripts">📊 Scripts API</a>
+    </nav>
+
+    <h1>🚀 Express ServerTag Demo</h1>
+    <p class="lead"><%= description %></p>
+
+    <div class="demo-box">
+      <h2>✨ What is ServerTag?</h2>
+      <p>ServerTag is a powerful Express middleware that automatically loads and injects external scripts into your web pages. It fetches script URLs from a remote JSON endpoint and caches them for optimal performance.</p>
+    </div>
+
+    <div class="feature-box">
+      <h2>🎯 Key Features</h2>
+      <ul>
+        <li><strong>🔄 Server-Side Loading:</strong> Scripts are fetched on the server, not the client</li>
+        <li><strong>⚡ Smart Caching:</strong> Configurable cache intervals reduce remote requests</li>
+        <li><strong>🛡️ Security:</strong> URL validation prevents malicious script injection</li>
+        <li><strong>🎨 Flexible Integration:</strong> Multiple ways to inject scripts (auto, manual, templates)</li>
+        <li><strong>🔧 Error Handling:</strong> Graceful fallbacks when script loading fails</li>
+        <li><strong>🎪 Template Support:</strong> Works with EJS, Handlebars, Pug, and more</li>
+      </ul>
+    </div>
+
+    <h2>📋 Current Script Status</h2>
+    <div class="script-list">
+      <p><strong>Scripts Loaded:</strong> <%= scripts.length %></p>
+      <% if (scripts.length > 0) { %>
+        <p><strong>Script URLs:</strong></p>
+        <ul>
+          <% scripts.forEach(script => { %>
+            <li><code><%= script %></code></li>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <p><em>No scripts loaded from remote endpoint.</em></p>
+      <% } %>
+    </div>
+
+    <h2>💻 Implementation Example</h2>
+    <p>Here's how easy it is to integrate ServerTag into your Express app:</p>
+    
+    <div class="code-block">
+import { serverTagMiddleware } from '@adunblock/server-tag-express';
+
+app.use(serverTagMiddleware({
+  remoteUrl: 'http://config.adunblocker.com/server-tag.json',
+  cacheInterval: 300, // 5 minutes
+  injectIntoHtml: true // Auto-inject scripts
+}));
+    </div>
+
+    <h2>🔗 Test Different Integration Methods</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+      <div class="feature-box">
+        <h3>📝 Template Integration</h3>
+        <p>This page uses EJS templates with the <code>serverTagHtml</code> helper.</p>
+        <a href="/about">View About Page →</a>
+      </div>
+      
+      <div class="feature-box">
+        <h3>🔧 Manual Injection</h3>
+        <p>Programmatically inject scripts into HTML strings.</p>
+        <a href="/manual">Try Manual Injection →</a>
+      </div>
+      
+      <div class="feature-box">
+        <h3>🚀 Auto Injection</h3>
+        <p>Automatically inject scripts into HTML responses.</p>
+        <a href="/auto">Try Auto Injection →</a>
+      </div>
+      
+      <div class="feature-box">
+        <h3>📊 API Access</h3>
+        <p>Access script data via JSON API endpoints.</p>
+        <a href="/api/scripts">View Scripts API →</a>
+      </div>
+    </div>
+
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; text-align: center;">
+      <p>Express ServerTag Middleware Demo • Remote URL: <code>http://config.adunblocker.com/server-tag.json</code></p>
+    </footer>
+  </div>
+</body>
+</html> 

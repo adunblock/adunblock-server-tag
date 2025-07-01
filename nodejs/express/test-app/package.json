@@ -1,0 +1,24 @@
+{
+  "name": "express-server-tag-test-app",
+  "version": "1.0.0",
+  "description": "Test application for Express ServerTag middleware",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch server.ts",
+    "build": "tsc && node dist/server.js",
+    "start": "node dist/server.js",
+    "type-check": "tsc --noEmit",
+    "test": "echo 'Test suite not implemented yet'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  }
+} 

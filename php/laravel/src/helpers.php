@@ -22,7 +22,7 @@ if (!function_exists('server_tag')) {
         }
 
         $scripts = array_map(function ($src) {
-            return "<script src=\"{}\" async><\/script>";
+            return "<script src=\"{$src}\" async><\/script>";
         }, $jsFiles['js'] ?? []);
 
         return implode("\n", $scripts);

@@ -1,0 +1,62 @@
+{
+  "name": "@adunblock/server-tag-express",
+  "version": "1.0.0",
+  "description": "Express middleware for server-side script loading and injection",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "express",
+    "middleware",
+    "server-tag",
+    "script-injection",
+    "ssr",
+    "typescript"
+  ],
+  "scripts": {
+    "dev": "cd test-app && npm run dev",
+    "build": "vite build && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "watch": "vite build --watch",
+    "test": "cd test-app && npm test",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "peerDependencies": {
+    "express": "^4.18.0 || ^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "express": "^4.18.2",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "license": "MIT",
+  "author": "AdUnblock",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adunblock/server-tag.git",
+    "directory": "nodejs/express"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}

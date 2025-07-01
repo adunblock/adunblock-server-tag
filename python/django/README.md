@@ -1,28 +1,42 @@
-# adunblock-server-tag for Django
+# Server Tag Django Package
 
-This package provides a custom template tag to fetch and render scripts from a remote URL in your Django templates.
+A Django package to fetch and render scripts from a remote URL with template tag integration and caching support.
 
 ## Installation
 
-1.  Add the `server_tag` app to your `INSTALLED_APPS` in your Django `settings.py`:
+Install the package via pip:
 
-    ```python
-    INSTALLED_APPS = [
-        # ...
-        'server_tag',
-    ]
-    ```
+```bash
+pip install adunblock-server-tag-django
+```
 
-2.  Make sure you have a cache configured in your `settings.py`. For example, you can use the local memory cache for development:
+Add the `server_tag` app to your `INSTALLED_APPS` in your Django `settings.py`:
 
-    ```python
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake',
-        }
+```python
+INSTALLED_APPS = [
+    # ... other apps
+    'server_tag',
+]
+```
+
+Configure caching in your `settings.py` (recommended for production):
+
+```python
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
     }
-    ```
+}
+
+# Or for development, use local memory cache:
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+```
 
 ## Usage
 
@@ -45,41 +59,49 @@ In your Django template, load the `server_tag_tags` and use the `server_tag` tag
 
 ### Custom Rendering
 
-You can provide a custom Python function to the `render_script` argument to render the script tags in a different way. This function should be defined in a place where it can be imported into your template context.
-
-**Example:**
-
-In a file `my_app/utils.py`:
+You can provide a custom Python function to the `render_script` parameter to customize how script tags are rendered:
 
 ```python
-def my_script_renderer(js_files):
-    scripts = [f'<script src="{src}" defer></script>' for src in js_files.get('js', [])]
-    return '\n'.join(scripts)
+# my_app/templatetags/custom_tags.py
+from django import template
+from django.utils.safestring import mark_safe
+
+register = template.Library()
+
+@register.simple_tag
+def custom_script_renderer(js_files):
+    from django.utils.html import escape
+    scripts = [f'<script src="{escape(src)}" defer></script>' for src in js_files.get('js', [])]
+    return mark_safe('\n'.join(scripts))
 ```
-
-In your view:
-
-```python
-from django.shortcuts import render
-from .utils import my_script_renderer
-
-def my_view(request):
-    return render(request, 'my_template.html', {'my_renderer': my_script_renderer})
-```
-
-In your template:
 
 ```html
 {% load server_tag_tags %}
+{% load custom_tags %}
 
 <!DOCTYPE html>
 <html>
 <head>
   <title>My Page</title>
-  {% server_tag "https://your-remote-url.com/scripts.json" render_script=my_renderer %}
+  {% server_tag "https://your-remote-url.com/scripts.json" render_script=custom_script_renderer %}
 </head>
 <body>
   <h1>My Page</h1>
 </body>
 </html>
 ```
+
+## Features
+
+- **Template Tag Integration**: Easy-to-use Django template tag
+- **HTTP Client**: Uses requests library for reliable HTTP operations
+- **Caching**: Built-in Django cache integration with configurable TTL
+- **Error Handling**: Graceful error handling with fallback to empty arrays
+- **Security**: XSS protection with proper HTML escaping
+- **Django Integration**: Proper Django app structure with apps.py
+
+## Requirements
+
+- Python 3.8 or higher
+- Django 3.2 or higher
+- requests 2.25.0 or higher
