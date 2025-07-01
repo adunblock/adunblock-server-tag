@@ -55,38 +55,6 @@ All packages provide:
 - ✅ **Custom Rendering**: Support for custom script tag rendering
 - ✅ **TypeScript/Type Safety**: Where applicable (Node.js packages)
 
-## Quick Start
-
-Choose your framework and follow the specific installation guide:
-
-### Node.js (Next.js)
-```bash
-npm install @adunblock/server-tag-nextjs
-```
-```jsx
-import { ServerTag, createServerTagLoader } from '@adunblock/server-tag-nextjs';
-
-export default function Page() {
-  return <ServerTag remoteUrl="https://example.com/scripts.json" />;
-}
-```
-
-### PHP (Laravel)
-```bash
-composer require adunblock/server-tag-laravel
-```
-```blade
-{!! server_tag('https://example.com/scripts.json') !!}
-```
-
-### Python (Django)
-```bash
-pip install adunblock-server-tag-django
-```
-```html
-{% load server_tag_tags %}
-{% server_tag "https://example.com/scripts.json" %}
-```
 
 ## Expected Remote URL Format
 
@@ -111,21 +79,6 @@ Each package directory contains its own development setup:
 
 See individual package README files for detailed development instructions.
 
-## Repository Structure
-
-```
-adunblock-server-tag/
-├── nodejs/
-│   ├── nextjs/          # Next.js implementation
-│   └── react-router/    # React Router implementation
-├── php/
-│   ├── laravel/         # Laravel implementation
-│   └── symfony/         # Symfony implementation
-├── python/
-│   └── django/          # Django implementation
-├── .gitignore
-└── README.md
-```
 
 ## License
 
