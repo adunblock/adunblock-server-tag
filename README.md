@@ -22,6 +22,12 @@ AdBlock Server Tag packages allow you to dynamically fetch and render JavaScript
 - **Features**: Server-side rendering, dual CJS/ESM build, TypeScript support
 - **Installation**: `npm install @adunblock/server-tag-react-router`
 
+#### Express (and other Express-based Node.js apps)
+**Location**: [`nodejs/express/`](./nodejs/express/)
+- **Framework**: Express.js 4+ and other Express-based frameworks
+- **Features**: Middleware support, template engine integration, async/await
+- **Installation**: `npm install @adunblock/server-tag-express`
+
 ### PHP Packages
 
 #### Laravel
