@@ -1,10 +1,10 @@
-# AdBlock Server Tag
+# AdUnblock Server Tag
 
 A collection of packages for fetching and rendering scripts from remote URLs across different web frameworks and technologies. This monorepo contains implementations for various tech stacks, each providing similar functionality tailored to their respective ecosystems.
 
 ## Overview
 
-AdBlock Server Tag packages allow you to dynamically fetch and render JavaScript files from remote URLs with built-in caching, error handling, and security features. Each package is designed to integrate seamlessly with its target framework's conventions and best practices.
+AdUnblock Server Tag packages allow you to dynamically fetch and render JavaScript files from remote URLs with built-in caching, error handling, and security features. Each package is designed to integrate seamlessly with its target framework's conventions and best practices.
 
 ## Available Packages
 
