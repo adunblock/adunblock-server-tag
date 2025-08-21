@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-nextjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Next.js/React component for server-side script loading and rendering",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -39,7 +39,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adunblock/server-tag.git"
+    "url": "git+https://github.com/adunblock/adunblock-server-tag.git"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

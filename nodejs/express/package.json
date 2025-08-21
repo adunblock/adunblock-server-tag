@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-express",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Express middleware for server-side script loading and injection",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -49,7 +49,7 @@
   "author": "AdUnblock",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adunblock/server-tag.git",
+    "url": "git+https://github.com/adunblock/adunblock-server-tag.git",
     "directory": "nodejs/express"
   },
   "exports": {

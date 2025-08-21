@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-react-router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React Router component for client-side script loading and rendering",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
