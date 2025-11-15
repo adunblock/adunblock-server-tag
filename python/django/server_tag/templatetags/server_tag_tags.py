@@ -16,7 +16,16 @@ def server_tag(remote_url, cache_interval=300, render_script=None):
         try:
             response = requests.get(remote_url)
             response.raise_for_status()
-            js_files = response.json()
+            data = response.json()
+            # New format: API returns array directly instead of object with js property
+            if isinstance(data, list):
+                # New format: array directly
+                js_files = {'js': data}
+            elif isinstance(data, dict) and 'js' in data:
+                # Old format: object with js property (backward compatibility)
+                js_files = data
+            else:
+                js_files = {'js': []}
             cache.set(remote_url, js_files, cache_interval)
         except requests.exceptions.RequestException as e:
             print(f'Error fetching remote script: {e}')

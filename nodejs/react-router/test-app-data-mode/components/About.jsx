@@ -19,7 +19,7 @@ export default function About() {
         <h2>🔧 ServerTag Integration</h2>
         <p>The ServerTag component is integrated at the root level and loads scripts from:</p>
         <code style={{ background: "#fff", padding: "4px 8px", borderRadius: "4px" }}>
-          http://config.adunblocker.com/server-tag.json
+          https://public.adunblocker.com/api/vendor_scripts
         </code>
         <p style={{ marginTop: "10px" }}>These scripts are loaded server-side and injected into the HTML head during SSR.</p>
       </div>

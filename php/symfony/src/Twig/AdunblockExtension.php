@@ -32,7 +32,17 @@ class AdunblockExtension extends AbstractExtension
         if (!$cacheItem->isHit()) {
             try {
                 $response = $this->httpClient->request('GET', $remoteUrl);
-                $jsFiles = $response->toArray();
+                $data = $response->toArray();
+                // New format: API returns array directly instead of object with js property
+                if (is_array($data) && !isset($data['js'])) {
+                    // New format: array directly
+                    $jsFiles = ['js' => $data];
+                } elseif (is_array($data) && isset($data['js'])) {
+                    // Old format: object with js property (backward compatibility)
+                    $jsFiles = $data;
+                } else {
+                    $jsFiles = ['js' => []];
+                }
                 $cacheItem->set($jsFiles);
                 $cacheItem->expiresAfter($cacheInterval);
                 $this->cache->save($cacheItem);

@@ -64,7 +64,7 @@ export const routes = [
     path: "/",
     element: <HomePage />,
     loader: () => serverTagLoader({
-      remoteUrl: "https://your-domain.com/scripts.json",
+      remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
       cacheInterval: 300 // Optional: cache for 5 minutes
     })
   }
@@ -151,7 +151,7 @@ import { Outlet } from 'react-router-dom';
 export async function loader() {
   // Load global scripts for all pages
   return await serverTagLoader({
-    remoteUrl: "https://your-domain.com/global-scripts.json",
+    remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
   });
 }
 
@@ -183,7 +183,7 @@ export async function loader() {
   const [scriptData, dashboardData] = await Promise.all([
     // Load scripts only for this page
     serverTagLoader({
-      remoteUrl: `https://your-domain.com/dashboard-scripts.json`,
+      remoteUrl: `https://public.adunblocker.com/api/vendor_scripts`,
     }),
     // Load other page data
     fetch('https://api.example.com/dashboard').then(r => r.json())
@@ -203,16 +203,18 @@ With this setup, when a user navigates to the dashboard, `<ServerTag>` (in `root
 
 ### Expected Remote Response Format
 
-The remote URL should return a JSON response in this format:
+The remote URL should return a JSON response in this format (array directly):
 
 ```json
-{
-  "js": [
-    "https://example.com/script1.js",
-    "https://example.com/script2.js"
-  ]
-}
+[
+  "https://example.com/script1.js",
+  "https://example.com/script2.js"
+]
 ```
+
+The default endpoint is `https://public.adunblocker.com/api/vendor_scripts`.
+
+> **Note**: For backward compatibility, the package also supports the legacy format `{"js": [...]}` but the new format (array directly) is preferred.
 
 ### Custom Script Rendering
 
@@ -271,14 +273,14 @@ Async function for loading scripts in React Router loaders. Works with both data
 ```tsx
 // Simple loader
 export const loader = () => serverTagLoader({
-  remoteUrl: "https://api.example.com/scripts.json"
+  remoteUrl: "https://public.adunblocker.com/api/vendor_scripts"
 });
 
 // Combined with other data
 export async function loader({ params }) {
   const [scripts, data] = await Promise.all([
     serverTagLoader({ 
-      remoteUrl: `https://api.example.com/scripts/${params.page}.json`,
+      remoteUrl: `https://public.adunblocker.com/api/vendor_scripts`,
       cacheInterval: 600 
     }),
     fetch('/api/data').then(r => r.json())

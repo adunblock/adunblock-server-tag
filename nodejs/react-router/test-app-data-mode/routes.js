@@ -10,7 +10,7 @@ export const routes = [
     loader: async () => {
       // Load global scripts for all pages using ServerTag loader
       return await serverTagLoader({
-        remoteUrl: "http://config.adunblocker.com/server-tag.json",
+        remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
         cacheInterval: 300
       });
     },

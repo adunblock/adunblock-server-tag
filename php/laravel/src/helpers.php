@@ -10,7 +10,17 @@ if (!function_exists('server_tag')) {
             try {
                 $response = Http::get($remoteUrl);
                 $response->throw();
-                return $response->json();
+                $data = $response->json();
+                // New format: API returns array directly instead of object with js property
+                if (is_array($data) && !isset($data['js'])) {
+                    // New format: array directly
+                    return ['js' => $data];
+                } elseif (is_array($data) && isset($data['js'])) {
+                    // Old format: object with js property (backward compatibility)
+                    return $data;
+                } else {
+                    return ['js' => []];
+                }
             } catch (\Exception $e) {
                 // Log the error or handle it as needed
                 return ['js' => []];

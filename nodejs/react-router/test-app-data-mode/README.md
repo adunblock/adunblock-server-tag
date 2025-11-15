@@ -6,7 +6,7 @@ This is a test application demonstrating React Router's **Data Mode** with serve
 
 - 🚀 **Server-Side Rendering**: Complete SSR implementation with hydration
 - 🔧 **Data Mode**: Uses `createStaticHandler` and `createBrowserRouter` 
-- 📦 **ServerTag Integration**: Loads scripts from `http://config.adunblocker.com/server-tag.json`
+- 📦 **ServerTag Integration**: Loads scripts from `https://public.adunblocker.com/api/vendor_scripts`
 - 🎯 **Route-based Data Loading**: Each route can have its own loader
 - ⚡ **Script Caching**: ServerTag caches scripts for 5 minutes
 - 🎨 **Custom Server**: Full control over server and bundler setup

@@ -67,13 +67,16 @@ All packages provide:
 All packages expect the remote URL to return JSON in the following format:
 
 ```json
-{
-  "js": [
-    "https://cdn.example.com/script1.js",
-    "https://cdn.example.com/script2.js"
-  ]
-}
+[
+  "https://cdn.example.com/script1.js",
+  "https://cdn.example.com/script2.js"
+]
 ```
+
+The API endpoint returns an array of script URLs directly. The default endpoint is:
+- `https://public.adunblocker.com/api/vendor_scripts`
+
+> **Note**: For backward compatibility, packages also support the legacy format `{"js": [...]}` but the new format (array directly) is preferred.
 
 ## Development
 

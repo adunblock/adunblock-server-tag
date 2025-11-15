@@ -23,13 +23,13 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // Define ServerTag configuration
 const serverTagConfig: ServerTagMiddlewareOptions = {
-  remoteUrl: 'http://config.adunblocker.com/server-tag.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   cacheInterval: 300, // 5 minutes
   injectIntoHtml: false, // We'll handle injection manually for demo
-  onError: (error: Error, req: Request, res: Response) => {
+  onError: (error: Error, req: Request, _res: Response) => {
     console.error('ServerTag error on', req.path, ':', error.message);
   },
-  shouldInject: (req: Request, res: Response) => {
+  shouldInject: (req: Request, _res: Response) => {
     // Only inject on HTML pages, not API routes
     return !req.path.startsWith('/api/');
   }
@@ -41,7 +41,7 @@ app.use(serverTagMiddleware(serverTagConfig));
 // Routes
 
 // Home page - using EJS template with helper function
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.render('index', {
     title: 'Express ServerTag Demo',
     description: 'Demonstration of ServerTag middleware integration',
@@ -50,7 +50,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // About page - using EJS template
-app.get('/about', (req: Request, res: Response) => {
+app.get('/about', (_req: Request, res: Response) => {
   res.render('about', {
     title: 'About - Express ServerTag Demo',
     description: 'Learn about ServerTag middleware for Express',
@@ -59,7 +59,7 @@ app.get('/about', (req: Request, res: Response) => {
 });
 
 // Manual injection example
-app.get('/manual', (req: Request, res: Response) => {
+app.get('/manual', (_req: Request, res: Response) => {
   const scripts = res.locals.serverTagScripts || [];
   
   const html = `
@@ -100,12 +100,12 @@ app.get('/manual', (req: Request, res: Response) => {
 
 // Auto-injection example
 const autoInjectConfig: ServerTagMiddlewareOptions = {
-  remoteUrl: 'http://config.adunblocker.com/server-tag.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   injectIntoHtml: true, // Enable auto-injection for this route
   scriptAttributes: { defer: true } as ScriptAttributes // Custom attributes
 };
 
-app.get('/auto', serverTagMiddleware(autoInjectConfig), (req: Request, res: Response) => {
+app.get('/auto', serverTagMiddleware(autoInjectConfig), (_req: Request, res: Response) => {
   res.send(`
 <!DOCTYPE html>
 <html>
@@ -140,7 +140,7 @@ app.get('/auto', serverTagMiddleware(autoInjectConfig), (req: Request, res: Resp
 });
 
 // API endpoint to return scripts as JSON
-app.get('/api/scripts', (req: Request, res: Response) => {
+app.get('/api/scripts', (_req: Request, res: Response) => {
   const scripts = res.locals.serverTagScripts || [];
   res.json({
     scripts,
@@ -150,7 +150,7 @@ app.get('/api/scripts', (req: Request, res: Response) => {
 });
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
   const scripts = res.locals.serverTagScripts || [];
   res.json({ 
     status: 'ok', 
@@ -163,7 +163,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // TypeScript demo endpoint
-app.get('/typescript', (req: Request, res: Response) => {
+app.get('/typescript', (_req: Request, res: Response) => {
   const scripts = res.locals.serverTagScripts || [];
   res.json({
     message: 'This endpoint demonstrates TypeScript integration!',
@@ -187,7 +187,7 @@ app.get('/typescript', (req: Request, res: Response) => {
 });
 
 // Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Express error:', err);
   res.status(500).send(`
     <h1>Something went wrong!</h1>
@@ -197,7 +197,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // 404 handler
-app.use((req: Request, res: Response) => {
+app.use((_req: Request, res: Response) => {
   res.status(404).send(`
     <h1>Page Not Found</h1>
     <p>The page you're looking for doesn't exist.</p>

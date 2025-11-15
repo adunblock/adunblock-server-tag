@@ -29,7 +29,7 @@ import ServerTag from '@adunblock/server-tag-nextjs';
 export default function MyPage() {
   return (
     <div>
-      <ServerTag remoteUrl="https://your-domain.com/scripts.json" />
+      <ServerTag remoteUrl="https://public.adunblocker.com/api/vendor_scripts" />
       <h1>My Page Content</h1>
     </div>
   );
@@ -38,16 +38,18 @@ export default function MyPage() {
 
 ### Expected Remote Response Format
 
-The remote URL should return a JSON response in this format:
+The remote URL should return a JSON response in this format (array directly):
 
 ```json
-{
-  "js": [
-    "https://example.com/script1.js",
-    "https://example.com/script2.js"
-  ]
-}
+[
+  "https://example.com/script1.js",
+  "https://example.com/script2.js"
+]
 ```
+
+The default endpoint is `https://public.adunblocker.com/api/vendor_scripts`.
+
+> **Note**: For backward compatibility, the package also supports the legacy format `{"js": [...]}` but the new format (array directly) is preferred.
 
 ### Advanced Usage with Custom Caching
 
@@ -58,7 +60,7 @@ export default function MyPage() {
   return (
     <div>
       <ServerTag
-        remoteUrl="https://your-domain.com/scripts.json"
+        remoteUrl="https://public.adunblocker.com/api/vendor_scripts"
         cacheInterval={600} // Cache for 10 minutes (default: 300 seconds)
       />
       <h1>My Page Content</h1>
@@ -79,7 +81,7 @@ export default function MyPage() {
   return (
     <div>
       <ServerTag
-        remoteUrl="https://your-domain.com/scripts.json"
+        remoteUrl="https://public.adunblocker.com/api/vendor_scripts"
         renderScript={({ js }) =>
           js.map((src) => (
             <Script 

@@ -29,7 +29,7 @@ export default function Root() {
       </main>
       <footer style={{ marginTop: "40px", padding: "20px 0", borderTop: "1px solid #eee", color: "#666" }}>
         <p>React Router Data Mode SSR Test App</p>
-        <p>ServerTag integrated with scripts from: http://config.adunblocker.com/server-tag.json</p>
+        <p>ServerTag integrated with scripts from: https://public.adunblocker.com/api/vendor_scripts</p>
       </footer>
     </div>
   );

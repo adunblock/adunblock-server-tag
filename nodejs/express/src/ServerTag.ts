@@ -85,20 +85,15 @@ async function fetchScripts(
 
       const data = await response.json() as unknown;
 
-      // Validate response structure
-      if (!data || typeof data !== 'object') {
-        throw new ValidationError('Invalid response format. Expected JSON object.');
-      }
-
-      const typedData = data as Record<string, unknown>;
-      if (!Array.isArray(typedData.js)) {
-        throw new ValidationError('Invalid response format. Expected object with "js" array.');
+      // Validate response structure - new format is array directly
+      if (!Array.isArray(data)) {
+        throw new ValidationError('Invalid response format. Expected JSON array.');
       }
 
       // Validate that all entries are strings
-      const jsArray = typedData.js as unknown[];
+      const jsArray = data as unknown[];
       if (!jsArray.every(item => typeof item === 'string')) {
-        throw new ValidationError('Invalid response format. All "js" entries must be strings.');
+        throw new ValidationError('Invalid response format. All array entries must be strings.');
       }
 
       return { js: jsArray as string[] };

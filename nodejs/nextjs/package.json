@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-nextjs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Next.js/React component for server-side script loading and rendering",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

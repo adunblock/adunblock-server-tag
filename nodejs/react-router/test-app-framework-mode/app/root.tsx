@@ -14,7 +14,7 @@ import "./app.css";
 export async function loader() {
   // Load global scripts for all pages
   return await serverTagLoader({
-    remoteUrl: "http://config.adunblocker.com/server-tag.json",
+    remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
     cacheInterval: 300 // Cache for 5 minutes
   });
 }

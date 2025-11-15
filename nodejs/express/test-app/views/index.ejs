@@ -124,7 +124,7 @@
 import { serverTagMiddleware } from '@adunblock/server-tag-express';
 
 app.use(serverTagMiddleware({
-  remoteUrl: 'http://config.adunblocker.com/server-tag.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   cacheInterval: 300, // 5 minutes
   injectIntoHtml: true // Auto-inject scripts
 }));
@@ -158,7 +158,7 @@ app.use(serverTagMiddleware({
     </div>
 
     <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; text-align: center;">
-      <p>Express ServerTag Middleware Demo • Remote URL: <code>http://config.adunblocker.com/server-tag.json</code></p>
+      <p>Express ServerTag Middleware Demo • Remote URL: <code>https://public.adunblocker.com/api/vendor_scripts</code></p>
     </footer>
   </div>
 </body>

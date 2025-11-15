@@ -30,7 +30,7 @@ const app = express();
 
 // Add ServerTag middleware with TypeScript support
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/scripts.json'
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts'
 }));
 
 // Your routes will now have access to script data
@@ -63,7 +63,7 @@ import type {
 } from '@adunblock/server-tag-express';
 
 const config: ServerTagMiddlewareOptions = {
-  remoteUrl: 'https://config.example.com/scripts.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   cacheInterval: 300,
   scriptAttributes: {
     async: true,
@@ -76,16 +76,18 @@ app.use(serverTagMiddleware(config));
 
 ## Expected Remote Response Format
 
-Your remote URL should return JSON in this format:
+Your remote URL should return JSON in this format (array directly):
 
 ```json
-{
-  "js": [
-    "https://example.com/script1.js",
-    "https://example.com/script2.js"
-  ]
-}
+[
+  "https://example.com/script1.js",
+  "https://example.com/script2.js"
+]
 ```
+
+The default endpoint is `https://public.adunblocker.com/api/vendor_scripts`.
+
+> **Note**: For backward compatibility, the package also supports the legacy format `{"js": [...]}` but the new format (array directly) is preferred.
 
 ## Integration Methods
 
@@ -118,7 +120,7 @@ Automatically inject scripts into HTML responses:
 
 ```typescript
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/scripts.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   injectIntoHtml: true,
   injectPosition: '</head>', // Where to inject
   scriptAttributes: { async: true } // Script tag attributes
@@ -177,7 +179,7 @@ app.get('/custom', (req, res) => {
 import type { ServerTagMiddlewareOptions } from '@adunblock/server-tag-express';
 
 const config: ServerTagMiddlewareOptions = {
-  remoteUrl: 'https://config.example.com/scripts.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   cacheInterval: 600, // 10 minutes
   injectIntoHtml: true,
   injectPosition: '</head>',
@@ -254,13 +256,13 @@ Apply ServerTag to specific routes with different configurations:
 ```typescript
 // Global middleware
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/global-scripts.json'
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts'
 }));
 
 // Route-specific middleware
 app.get('/special', 
   serverTagMiddleware({
-    remoteUrl: 'https://config.example.com/special-scripts.json',
+    remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
     cacheInterval: 60, // 1 minute cache
     scriptAttributes: { defer: true }
   }),
@@ -378,7 +380,7 @@ import {
 } from '@adunblock/server-tag-express';
 
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/scripts.json',
+  remoteUrl: 'https://public.adunblocker.com/api/vendor_scripts',
   onError: (error, req, res) => {
     if (error instanceof NetworkError) {
       console.error('Network error:', error.message, 'URL:', error.url);

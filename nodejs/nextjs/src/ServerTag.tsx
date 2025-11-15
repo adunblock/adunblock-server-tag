@@ -36,7 +36,16 @@ const ServerTag = async ({
       }
         
       const response = await fetch(remoteUrl);
-      jsFiles = await response.json();
+      const data = await response.json();
+      // New format: API returns array directly instead of object with js property
+      if (Array.isArray(data)) {
+        jsFiles = { js: data };
+      } else if (data && typeof data === 'object' && Array.isArray(data.js)) {
+        // Backward compatibility: handle old format
+        jsFiles = { js: data.js };
+      } else {
+        throw new Error('Invalid response format. Expected array or object with js array.');
+      }
       cache[remoteUrl] = { data: jsFiles, timestamp: now };
     } catch (error) {
       console.error("Error fetching remote script:", error);
