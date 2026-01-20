@@ -32,7 +32,7 @@ if (!function_exists('server_tag')) {
         }
 
         $scripts = array_map(function ($src) {
-            return "<script src=\"{$src}\" async><\/script>";
+            return sprintf('<script src="%s" async></script>', htmlspecialchars($src, ENT_QUOTES, 'UTF-8'));
         }, $jsFiles['js'] ?? []);
 
         return implode("\n", $scripts);

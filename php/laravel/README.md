@@ -21,7 +21,7 @@ In your Blade template, you can now use the `server_tag` function:
 <html>
 <head>
   <title>My Page</title>
-  {!! server_tag('https://your-remote-url.com/scripts.json') !!}
+  {!! server_tag('https://your-remote-url.com/scripts') !!}
 </head>
 <body>
   <h1>My Page</h1>
@@ -39,7 +39,7 @@ You can provide a custom closure to the `render_script` argument to render the s
 <head>
   <title>My Page</title>
   {!!
-    server_tag('https://your-remote-url.com/scripts.json', 300, function($jsFiles) {
+    server_tag('https://your-remote-url.com/scripts', 300, function($jsFiles) {
       $scripts = array_map(function ($src) {
         return "<script src=\"{{$src}}\" defer></script>";
       }, $jsFiles['js'] ?? []);

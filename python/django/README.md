@@ -49,7 +49,7 @@ In your Django template, load the `server_tag_tags` and use the `server_tag` tag
 <html>
 <head>
   <title>My Page</title>
-  {% server_tag "https://your-remote-url.com/scripts.json" %}
+  {% server_tag "https://your-remote-url.com/scripts" %}
 </head>
 <body>
   <h1>My Page</h1>
@@ -83,7 +83,7 @@ def custom_script_renderer(js_files):
 <html>
 <head>
   <title>My Page</title>
-  {% server_tag "https://your-remote-url.com/scripts.json" render_script=custom_script_renderer %}
+  {% server_tag "https://your-remote-url.com/scripts" render_script=custom_script_renderer %}
 </head>
 <body>
   <h1>My Page</h1>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Adunblock\ServerTag\Symfony\Twig;
+namespace AdUnblock\ServerTag\Symfony\Twig;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

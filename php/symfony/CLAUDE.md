@@ -36,4 +36,4 @@ find src -name "*.php" -exec php -l {} \;
 - Twig extension for easy template integration
 - HTTP client for fetching remote scripts
 - Caching support for improved performance
-- PSR-4 autoloading with namespace `Adunblock\ServerTag\Symfony\`
+- PSR-4 autoloading with namespace `AdUnblock\ServerTag\Symfony\`

@@ -15,8 +15,8 @@
   "homepage": "https://github.com/adunblock/adunblock-server-tag",
   "authors": [
     {
-      "name": "Adunblock",
-      "email": "dev@adunblock.com"
+      "name": "AdUnblock",
+      "email": "support@ad-unblock.com"
     }
   ],
   "support": {
@@ -25,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Adunblock\\ServerTag\\Symfony\\": "src/"
+      "AdUnblock\\ServerTag\\Symfony\\": "src/"
     }
   },
   "require": {

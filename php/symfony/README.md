@@ -17,7 +17,7 @@ Enable the bundle in your `config/bundles.php`:
 
 return [
     // ... other bundles
-    Adunblock\ServerTag\Symfony\AdunblockServerTagBundle::class => ['all' => true],
+    AdUnblock\ServerTag\Symfony\AdunblockServerTagBundle::class => ['all' => true],
 ];
 ```
 
@@ -30,7 +30,7 @@ In your Twig template, you can now use the `server_tag` function:
 <html>
 <head>
   <title>My Page</title>
-  {{ server_tag('https://your-remote-url.com/scripts.json') }}
+  {{ server_tag('https://your-remote-url.com/scripts') }}
 </head>
 <body>
   <h1>My Page</h1>
@@ -47,7 +47,7 @@ You can provide a custom callable to the `render_script` parameter to customize 
 <html>
 <head>
   <title>My Page</title>
-  {{ server_tag('https://your-remote-url.com/scripts.json', 300, custom_renderer) }}
+  {{ server_tag('https://your-remote-url.com/scripts', 300, custom_renderer) }}
 </head>
 <body>
   <h1>My Page</h1>

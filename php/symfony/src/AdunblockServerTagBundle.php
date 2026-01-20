@@ -1,8 +1,8 @@
 <?php
 
-namespace Adunblock\ServerTag\Symfony;
+namespace AdUnblock\ServerTag\Symfony;
 
-use Adunblock\ServerTag\Symfony\DependencyInjection\AdunblockServerTagExtension;
+use AdUnblock\ServerTag\Symfony\DependencyInjection\AdunblockServerTagExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AdunblockServerTagBundle extends Bundle

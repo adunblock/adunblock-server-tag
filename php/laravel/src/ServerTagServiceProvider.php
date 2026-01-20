@@ -1,6 +1,6 @@
 <?php
 
-namespace Adunblock\ServerTagLaravel;
+namespace AdUnblock\ServerTagLaravel;
 
 use Illuminate\Support\ServiceProvider;
 

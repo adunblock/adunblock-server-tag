@@ -1,8 +1,8 @@
 <?php
 
-namespace Adunblock\ServerTag\Symfony\DependencyInjection;
+namespace AdUnblock\ServerTag\Symfony\DependencyInjection;
 
-use Adunblock\ServerTag\Symfony\Twig\AdunblockExtension;
+use AdUnblock\ServerTag\Symfony\Twig\AdunblockExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;

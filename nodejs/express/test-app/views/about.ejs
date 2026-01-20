@@ -226,12 +226,12 @@
     <div style="background: #2d3748; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 14px; overflow-x: auto;">
 // Basic usage
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/scripts.json'
+  remoteUrl: 'https://config.example.com/scripts'
 }));
 
 // Advanced configuration
 app.use(serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/scripts.json',
+  remoteUrl: 'https://config.example.com/scripts',
   cacheInterval: 600, // 10 minutes
   scriptAttributes: { defer: true },
   shouldInject: (req, res) => !req.path.startsWith('/api/'),
@@ -242,7 +242,7 @@ app.use(serverTagMiddleware({
 
 // Route-specific usage
 app.get('/special', serverTagMiddleware({
-  remoteUrl: 'https://config.example.com/special-scripts.json',
+  remoteUrl: 'https://config.example.com/special-scripts',
   injectIntoHtml: true
 }), (req, res) => {
   res.send('&lt;html&gt;...&lt;/html&gt;');
