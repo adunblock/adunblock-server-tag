@@ -2,9 +2,16 @@
 import React from "react";
 import Script from "next/script";
 
+export type ScriptAttributeValue = string | boolean | number | undefined;
+
+export interface ScriptAttributes {
+  [key: string]: ScriptAttributeValue;
+}
+
 export interface ServerTagProps {
   remoteUrl: string;
   cacheInterval?: number;
+  scriptAttributes?: ScriptAttributes;
   renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;
 }
 
@@ -14,6 +21,7 @@ const cache: { [url: string]: { data: { js: string[] }; timestamp: number } } =
 const ServerTag = async ({
   remoteUrl,
   cacheInterval = 300,
+  scriptAttributes,
   renderScript,
 }: ServerTagProps) => {
   // Ensure this only runs on the server
@@ -58,7 +66,7 @@ const ServerTag = async ({
       {renderScript
         ? renderScript(jsFiles)
         : jsFiles.js?.map((src) => (
-            <Script key={src} src={src} strategy="beforeInteractive" />
+            <Script key={src} src={src} strategy="beforeInteractive" {...scriptAttributes} />
           ))}
     </>
   );

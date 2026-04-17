@@ -4,6 +4,8 @@ import {
   type ServerTagProps,
   type ServerTagLoaderData,
   type ServerTagLoaderArgs,
+  type ScriptAttributes,
+  type ScriptAttributeValue,
 } from "./ServerTag";
 
 export {
@@ -12,6 +14,8 @@ export {
   type ServerTagProps,
   type ServerTagLoaderData,
   type ServerTagLoaderArgs,
+  type ScriptAttributes,
+  type ScriptAttributeValue,
 };
 
 export default ServerTag;

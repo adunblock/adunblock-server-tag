@@ -69,6 +69,35 @@ export default function MyPage() {
 }
 ```
 
+### Custom Script Attributes
+
+Pass extra attributes (including `data-*`) that should be rendered on every generated `<script>` tag:
+
+```tsx
+import ServerTag from '@adunblock/server-tag-nextjs';
+
+export default function MyPage() {
+  return (
+    <ServerTag
+      remoteUrl="https://public.adunblocker.com/api/vendor_scripts"
+      scriptAttributes={{
+        'data-code': 'abc123',
+        'data-source': 'server-tag',
+        defer: true,
+      }}
+    />
+  );
+}
+```
+
+Rendering rules:
+
+- `true` → bare attribute (e.g. `defer`)
+- `false` / `undefined` / `null` → omitted
+- any other value → `key="value"`
+
+`scriptAttributes` also lets you override the default `strategy="beforeInteractive"` if you pass a `strategy` key.
+
 ### Custom Script Rendering
 
 Override the default script rendering with a custom callback:
@@ -107,14 +136,22 @@ export default function MyPage() {
 |------|------|---------|-------------|
 | `remoteUrl` | `string` | Required | The URL to fetch script URLs from |
 | `cacheInterval` | `number` | `300` | Cache duration in seconds |
+| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes applied to every generated `<script>` tag (e.g. `data-code`) |
 | `renderScript` | `function` | `undefined` | Custom script rendering function |
 
 ### Types
 
 ```typescript
+type ScriptAttributeValue = string | boolean | number | undefined;
+
+interface ScriptAttributes {
+  [key: string]: ScriptAttributeValue;
+}
+
 interface ServerTagProps {
   remoteUrl: string;
   cacheInterval?: number;
+  scriptAttributes?: ScriptAttributes;
   renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;
 }
 ```

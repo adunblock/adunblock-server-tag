@@ -3,11 +3,21 @@ import requests
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
 
 register = template.Library()
 
+
+def _render_attr(key, value):
+    if value is True:
+        return escape(key)
+    if value is False or value is None:
+        return ''
+    return f'{escape(key)}="{escape(str(value))}"'
+
+
 @register.simple_tag
-def server_tag(remote_url, cache_interval=300, render_script=None):
+def server_tag(remote_url, cache_interval=300, render_script=None, script_attributes=None):
     cached_data = cache.get(remote_url)
 
     if cached_data:
@@ -33,8 +43,16 @@ def server_tag(remote_url, cache_interval=300, render_script=None):
 
     if render_script:
         return mark_safe(render_script(js_files))
-    else:
-        from django.utils.html import escape
-        scripts = [f'<script src="{escape(src)}" async></script>' for src in js_files.get('js', [])]
-        return mark_safe('\n'.join(scripts))
+
+    attrs = {'async': True}
+    if script_attributes:
+        attrs.update(script_attributes)
+
+    attr_str = ' '.join(filter(None, (_render_attr(k, v) for k, v in attrs.items())))
+    suffix = f' {attr_str}' if attr_str else ''
+    scripts = [
+        f'<script src="{escape(src)}"{suffix}></script>'
+        for src in js_files.get('js', [])
+    ]
+    return mark_safe('\n'.join(scripts))
 

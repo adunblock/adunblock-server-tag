@@ -169,7 +169,7 @@ app.get('/custom', (req, res) => {
 | `cacheInterval` | `number` | `300` | Cache duration in seconds |
 | `injectIntoHtml` | `boolean` | `true` | Auto-inject scripts into HTML responses |
 | `injectPosition` | `string` | `'</head>'` | Where to inject scripts in HTML |
-| `scriptAttributes` | `ScriptAttributes` | `{async: true}` | Additional attributes for script tags |
+| `scriptAttributes` | `ScriptAttributes` | `{async: true}` | Additional attributes applied to every generated `<script>` tag (e.g. `data-code`) |
 | `onError` | `function` | `undefined` | Custom error handler function |
 | `shouldInject` | `function` | `() => true` | Conditional injection logic |
 
@@ -183,9 +183,10 @@ const config: ServerTagMiddlewareOptions = {
   cacheInterval: 600, // 10 minutes
   injectIntoHtml: true,
   injectPosition: '</head>',
-  scriptAttributes: { 
+  scriptAttributes: {
     defer: true,
-    'data-source': 'server-tag' 
+    'data-source': 'server-tag',
+    'data-code': 'abc123'
   },
   shouldInject: (req, res) => {
     // Don't inject scripts on API routes

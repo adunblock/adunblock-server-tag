@@ -1,8 +1,15 @@
 import React from "react";
 import { useMatches } from "react-router";
 
+export type ScriptAttributeValue = string | boolean | number | undefined;
+
+export interface ScriptAttributes {
+  [key: string]: ScriptAttributeValue;
+}
+
 export interface ServerTagProps {
   async?: boolean;
+  scriptAttributes?: ScriptAttributes;
   renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;
 }
 
@@ -81,6 +88,7 @@ export const serverTagLoader = (
 export const ServerTag: React.FC<ServerTagProps> = ({
   renderScript,
   async = true,
+  scriptAttributes,
 }) => {
   const matches = useMatches();
 
@@ -107,7 +115,9 @@ export const ServerTag: React.FC<ServerTagProps> = ({
     <>
       {renderScript
         ? renderScript(jsFiles)
-        : jsFiles.js.map((src) => <script key={src} src={src} async={async} />)}
+        : jsFiles.js.map((src) => (
+            <script key={src} src={src} async={async} {...scriptAttributes} />
+          ))}
     </>
   );
 };

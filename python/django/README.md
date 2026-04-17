@@ -57,6 +57,35 @@ In your Django template, load the `server_tag_tags` and use the `server_tag` tag
 </html>
 ```
 
+### Custom Script Attributes
+
+Pass a `script_attributes` dict from your view context to render extra attributes (including `data-*`) on every generated `<script>` tag:
+
+```python
+# views.py
+def my_view(request):
+    return render(request, 'my_template.html', {
+        'script_attrs': {
+            'data-code': 'abc123',
+            'data-source': 'server-tag',
+            'defer': True,
+        },
+    })
+```
+
+```html
+{% load server_tag_tags %}
+{% server_tag "https://your-remote-url.com/scripts" script_attributes=script_attrs %}
+```
+
+Rendering rules:
+
+- `True` → bare attribute (e.g. `defer`)
+- `False` / `None` → omitted
+- any other value → `key="value"` (HTML-escaped)
+
+By default, every rendered script includes `async`. Set `script_attributes={'async': False}` to disable it.
+
 ### Custom Rendering
 
 You can provide a custom Python function to the `render_script` parameter to customize how script tags are rendered:

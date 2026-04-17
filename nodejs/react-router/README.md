@@ -216,6 +216,34 @@ The default endpoint is `https://public.adunblocker.com/api/vendor_scripts`.
 
 > **Note**: For backward compatibility, the package also supports the legacy format `{"js": [...]}` but the new format (array directly) is preferred.
 
+### Custom Script Attributes
+
+Pass extra attributes (including `data-*`) that should be rendered on every generated `<script>` tag:
+
+```tsx
+import { ServerTag } from '@adunblock/server-tag-react-router';
+
+function MyPage() {
+  return (
+    <ServerTag
+      scriptAttributes={{
+        'data-code': 'abc123',
+        'data-source': 'server-tag',
+        defer: true,
+      }}
+    />
+  );
+}
+```
+
+Rendering rules:
+
+- `true` → bare attribute (e.g. `defer`)
+- `false` / `undefined` / `null` → omitted
+- any other value → `key="value"`
+
+When both `async` (prop) and `scriptAttributes.async` are set, the explicit `scriptAttributes` entry wins.
+
 ### Custom Script Rendering
 
 Override the default script rendering with a custom callback:
@@ -254,6 +282,7 @@ function MyPage() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `async` | `boolean` | `true` | Toggles the `async` attribute on the script tag. |
+| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes applied to every generated `<script>` tag (e.g. `data-code`). |
 | `renderScript` | `function` | `undefined` | Custom script rendering function. |
 
 ### Loader Function
@@ -292,8 +321,15 @@ export async function loader({ params }) {
 ### Types
 
 ```typescript
+type ScriptAttributeValue = string | boolean | number | undefined;
+
+interface ScriptAttributes {
+  [key: string]: ScriptAttributeValue;
+}
+
 interface ServerTagProps {
   async?: boolean;
+  scriptAttributes?: ScriptAttributes;
   renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;
 }
 

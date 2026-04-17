@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "adunblock-server-tag-django"
-version = "1.0.0"
+version = "1.1.0"
 description = "A Django package to fetch and render scripts from a remote URL with template tag integration and caching support."
 readme = "README.md"
 license = {text = "ISC"}
