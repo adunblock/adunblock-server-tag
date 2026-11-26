@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-react-router",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A React Router component for client-side script loading and rendering",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
@@ -24,7 +24,8 @@
     "dev": "cd test-app-framework-mode && npm run dev",
     "test:build": "cd test-app-framework-mode && npm run build",
     "test:start": "cd test-app-framework-mode && npm run start",
-    "test:e2e": "cd test-app-framework-mode && npm run test:e2e"
+    "test:e2e": "cd test-app-framework-mode && npm run test:e2e",
+    "test": "vitest run test"
   },
   "keywords": [
     "react",
@@ -47,6 +48,11 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
-    "typescript": "^5"
+    "@types/react-dom": "^19",
+    "react": "^19",
+    "react-dom": "^19",
+    "react-router": "^7",
+    "typescript": "^5",
+    "vitest": "^2.1.9"
   }
 }

@@ -275,6 +275,33 @@ function MyPage() {
 }
 ```
 
+## The tag it prints
+
+By default the package prints one tag, for the first URL in the response (the preferred one):
+
+```html
+<script data-cfasync="false" nowprocket src="SCRIPT_URL" async data-code="ACCOUNT_ID"></script>
+```
+
+- `data-cfasync="false"` and `nowprocket` come **before** `src`: Cloudflare Rocket Loader skips a script only when `data-cfasync="false"` precedes `src`, and `nowprocket` keeps WP Rocket's Delay JavaScript Execution off it. Pass either with `false` to drop it.
+- Your attributes (`data-code` and anything else) come after `src`.
+- Only the first URL is rendered: the client must load once per page, since each copy runs its own adblock detection and asks for its own proxy session. A custom renderer still receives every URL.
+
+## The site's domain
+
+Pass the loader's `request` to `serverTagLoader` and it sends your site's domain to the sources endpoint as `?domain=`, taken from the request URL's host; or pass `domain` yourself:
+
+```tsx
+export async function loader({ request }: Route.LoaderArgs) {
+  return serverTagLoader({
+    remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
+    request,
+  });
+}
+```
+
+A loader that passes neither sends no domain and gets the default list, as before. When an ad blocker rule targets one site, we publish a new script host for that site alone, and only a request naming the site receives it. A `domain` parameter already in your URL is kept as it is.
+
 ## API Reference
 
 ### ServerTag Component
@@ -282,7 +309,7 @@ function MyPage() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `async` | `boolean` | `true` | Toggles the `async` attribute on the script tag. |
-| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes applied to every generated `<script>` tag (e.g. `data-code`). |
+| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes for the generated `<script>` tag (e.g. `data-code`). |
 | `renderScript` | `function` | `undefined` | Custom script rendering function. |
 
 ### Loader Function
@@ -294,6 +321,8 @@ Async function for loading scripts in React Router loaders. Works with both data
 **Parameters:**
 - `config.remoteUrl` (string, required): The URL to fetch script URLs from  
 - `config.cacheInterval` (number, optional): Cache duration in seconds (default: 300)
+- `config.request` (Request, optional): The loader's request; its host is the default `domain`
+- `config.domain` (string, optional): Your site's domain, sent as `?domain=`
 
 **Returns:** `Promise<ServerTagLoaderData>`
 
@@ -301,8 +330,9 @@ Async function for loading scripts in React Router loaders. Works with both data
 
 ```tsx
 // Simple loader
-export const loader = () => serverTagLoader({
-  remoteUrl: "https://public.adunblocker.com/api/vendor_scripts"
+export const loader = ({ request }) => serverTagLoader({
+  remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
+  request,
 });
 
 // Combined with other data
@@ -336,6 +366,8 @@ interface ServerTagProps {
 interface ServerTagLoaderArgs {
   remoteUrl: string;
   cacheInterval?: number;
+  domain?: string;
+  request?: Request;
 }
 
 interface ServerTagLoaderData {

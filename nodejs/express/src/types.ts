@@ -52,6 +52,12 @@ export interface ScriptAttributes {
 export interface ServerTagMiddlewareOptions extends ServerTagConfig {
   /** URL to fetch scripts from (required) */
   remoteUrl: string;
+  /**
+   * The site's domain, sent to the sources endpoint as `?domain=` so the site
+   * gets its own script list. Defaults to the request's hostname (`req.hostname`).
+   * Ignored when `remoteUrl` already has a `domain` parameter.
+   */
+  domain?: string;
   /** Whether to automatically inject scripts into HTML responses */
   injectIntoHtml?: boolean;
   /** Where to inject scripts in HTML */

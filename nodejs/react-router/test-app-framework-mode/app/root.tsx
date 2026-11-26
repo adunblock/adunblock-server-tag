@@ -11,11 +11,12 @@ import { ServerTag, serverTagLoader } from "../../src/ServerTag";
 import type { Route } from "./+types/root";
 import "./app.css";
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   // Load global scripts for all pages
   return await serverTagLoader({
     remoteUrl: "https://public.adunblocker.com/api/vendor_scripts",
-    cacheInterval: 300 // Cache for 5 minutes
+    cacheInterval: 300, // Cache for 5 minutes
+    request, // its host is sent as ?domain=
   });
 }
 
@@ -40,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <ServerTag />
+        <ServerTag scriptAttributes={{ "data-code": "12345678" }} />
       </head>
       <body>
         {children}

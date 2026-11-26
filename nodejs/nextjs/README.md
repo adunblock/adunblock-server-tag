@@ -96,7 +96,7 @@ Rendering rules:
 - `false` / `undefined` / `null` → omitted
 - any other value → `key="value"`
 
-`scriptAttributes` also lets you override the default `strategy="beforeInteractive"` if you pass a `strategy` key.
+Passing a `strategy` key renders the tag with `next/script`, as 1.1 did. In the App Router, `next/script` builds its tag in the browser, so the HTML has no `<script>` tag for Rocket Loader or our site verification to see.
 
 ### Custom Script Rendering
 
@@ -128,6 +128,24 @@ export default function MyPage() {
 }
 ```
 
+## The tag it prints
+
+By default the package prints one tag, for the first URL in the response (the preferred one):
+
+```html
+<script data-cfasync="false" nowprocket src="SCRIPT_URL" async data-code="ACCOUNT_ID"></script>
+```
+
+- `data-cfasync="false"` and `nowprocket` come **before** `src`: Cloudflare Rocket Loader skips a script only when `data-cfasync="false"` precedes `src`, and `nowprocket` keeps WP Rocket's Delay JavaScript Execution off it. Pass either with `false` to drop it.
+- Your attributes (`data-code` and anything else) come after `src`.
+- Only the first URL is rendered: the client must load once per page, since each copy runs its own adblock detection and asks for its own proxy session. A custom renderer still receives every URL.
+
+The default is a plain `<script>`, not `next/script`: React hoists it into `<head>`, so it still loads early.
+
+## The site's domain
+
+`ServerTag` sends your site's domain to the sources endpoint as `?domain=`. Without a `domain` prop it reads the request's host with `headers()` from `next/headers` (`x-forwarded-host`, else `host`), which renders the route dynamically, so each request gets the current script URL. Pass `domain` (e.g. `domain="example.com"`) to keep a route static: a static page keeps the script URL it was built with until it is rebuilt or revalidated. When an ad blocker rule targets one site, we publish a new script host for that site alone, and only a request naming the site receives it. A `domain` parameter already in your URL is kept as it is.
+
 ## API Reference
 
 ### Props
@@ -135,8 +153,9 @@ export default function MyPage() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `remoteUrl` | `string` | Required | The URL to fetch script URLs from |
+| `domain` | `string` | the request's host | Your site's domain, sent as `?domain=` |
 | `cacheInterval` | `number` | `300` | Cache duration in seconds |
-| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes applied to every generated `<script>` tag (e.g. `data-code`) |
+| `scriptAttributes` | `ScriptAttributes` | `undefined` | Extra attributes for the generated `<script>` tag (e.g. `data-code`) |
 | `renderScript` | `function` | `undefined` | Custom script rendering function |
 
 ### Types
@@ -150,6 +169,7 @@ interface ScriptAttributes {
 
 interface ServerTagProps {
   remoteUrl: string;
+  domain?: string;
   cacheInterval?: number;
   scriptAttributes?: ScriptAttributes;
   renderScript?: (jsFiles: { js: string[] }) => React.ReactNode;

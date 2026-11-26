@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+// globals.css is Tailwind, which this test app does not install.
 import { ServerTag } from "../../../src";
 
 const geistSans = Geist({
@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ServerTag remoteUrl="http://localhost:3000/api/test-scripts" />
+        <ServerTag remoteUrl="http://localhost:3000/api/test-scripts" scriptAttributes={{ "data-code": "12345678" }} />
         {children}
       </body>
     </html>
