@@ -16,6 +16,13 @@ import { NetworkError, ValidationError, TimeoutError } from './types.js';
 const cache = new Map<string, CacheEntry>();
 
 /**
+ * The cache is keyed by the full sources URL, and the URL carries the site's
+ * domain, which by default comes from the request's Host header. Capping the
+ * entry count keeps a stream of made-up Host headers from growing it forever.
+ */
+const MAX_CACHE_ENTRIES = 1000;
+
+/**
  * Default configuration
  */
 const DEFAULT_CONFIG: Required<ServerTagConfig> = {
@@ -41,6 +48,27 @@ function validateUrl(url: string): void {
       throw error;
     }
     throw new ValidationError(`Invalid URL: ${url}. ${(error as Error).message}`);
+  }
+}
+
+/**
+ * Adds `?domain=<site>` to the sources URL, so the response is the list for
+ * this site: when a filter rule blocks our script host on one site only, that
+ * site alone gets a new host, and only a request naming it receives it.
+ *
+ * The URL is left as it is when no domain is given, when it already carries a
+ * `domain` parameter (the caller chose one), or when it doesn't parse (the
+ * fetch then fails validation as before).
+ */
+export function withDomain(remoteUrl: string, domain?: string | null): string {
+  if (!domain) return remoteUrl;
+  try {
+    const url = new URL(remoteUrl);
+    if (url.searchParams.has('domain')) return remoteUrl;
+    url.searchParams.set('domain', domain);
+    return url.toString();
+  } catch {
+    return remoteUrl;
   }
 }
 
@@ -142,7 +170,11 @@ export const getScripts: GetScriptsFunction = async (
     // Fetch fresh data
     const data = await fetchScripts(remoteUrl, config);
 
-    // Update cache
+    // Update cache, evicting the oldest entry once it is full
+    if (!cache.has(cacheKey) && cache.size >= MAX_CACHE_ENTRIES) {
+      const oldest = cache.keys().next().value;
+      if (oldest !== undefined) cache.delete(oldest);
+    }
     cache.set(cacheKey, {
       data,
       timestamp: now,
@@ -165,7 +197,34 @@ export const getScripts: GetScriptsFunction = async (
 };
 
 /**
- * Generates script tags HTML from script URLs
+ * Attributes printed ahead of `src`, with their default values. Cloudflare
+ * Rocket Loader honours `data-cfasync="false"` only when it comes before
+ * `src`; `nowprocket` keeps WP Rocket's Delay JavaScript Execution off the tag.
+ * A caller can still override either, or drop it with `false`.
+ */
+const LEADING_ATTRIBUTES: ScriptAttributes = {
+  'data-cfasync': 'false',
+  nowprocket: true,
+};
+
+function renderAttributes(attrs: ScriptAttributes): string {
+  return Object.entries(attrs)
+    .map(([key, value]) => {
+      if (value === true) return key;
+      if (value === false || value === undefined || value === null) return '';
+      return `${key}="${String(value).replace(/"/g, '&quot;')}"`;
+    })
+    .filter(Boolean)
+    .join(' ');
+}
+
+/**
+ * Generates the script tag for the first valid URL in the list, the preferred
+ * one. The list is ordered most preferred first, and the client must load only
+ * once per page: each copy runs its own adblock detection and asks for its own
+ * proxy session.
+ *
+ * Output: `<script data-cfasync="false" nowprocket src="URL" async ...attributes></script>`
  */
 export const generateScriptTags: GenerateScriptTagsFunction = (
   scriptUrls: string[],
@@ -175,35 +234,27 @@ export const generateScriptTags: GenerateScriptTagsFunction = (
     return '';
   }
 
-  const defaultAttributes: ScriptAttributes = {
-    async: true,
-  };
+  const url = scriptUrls.find(candidate => {
+    try {
+      validateUrl(candidate);
+      return true;
+    } catch {
+      console.warn(`ServerTag: Skipping invalid script URL: ${candidate}`);
+      return false;
+    }
+  });
+  if (!url) return '';
 
-  const attrs = { ...defaultAttributes, ...attributes };
+  const leading: ScriptAttributes = { ...LEADING_ATTRIBUTES };
+  const trailing: ScriptAttributes = { async: true };
+  for (const [key, value] of Object.entries(attributes)) {
+    if (key in LEADING_ATTRIBUTES) leading[key] = value;
+    else trailing[key] = value;
+  }
 
-  return scriptUrls
-    .map(url => {
-      // Validate URL before generating tag
-      try {
-        validateUrl(url);
-      } catch (error) {
-        console.warn(`ServerTag: Skipping invalid script URL: ${url}`);
-        return '';
-      }
-
-      const attrString = Object.entries(attrs)
-        .map(([key, value]) => {
-          if (value === true) return key;
-          if (value === false || value === undefined || value === null) return '';
-          return `${key}="${String(value).replace(/"/g, '&quot;')}"`;
-        })
-        .filter(Boolean)
-        .join(' ');
-
-      return `<script src="${url.replace(/"/g, '&quot;')}"${attrString ? ' ' + attrString : ''}></script>`;
-    })
-    .filter(Boolean)
-    .join('\n');
+  const before = renderAttributes(leading);
+  const after = renderAttributes(trailing);
+  return `<script${before ? ' ' + before : ''} src="${url.replace(/"/g, '&quot;')}"${after ? ' ' + after : ''}></script>`;
 };
 
 /**

@@ -1,15 +1,23 @@
 import { test, expect } from '@playwright/test';
 
-test('ServerTag should inject scripts', async ({ page }) => {
-  await page.goto('http://localhost:3000');
+// test-app/src/app/layout.tsx renders <ServerTag> against /api/test-scripts,
+// which lists jquery first, then lodash and one more.
+const FIRST = 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js';
 
-  // Wait for the scripts to be present in the head
-  await page.waitForSelector('head > script[src="https://example.com/script1.js"]');
-  await page.waitForSelector('head > script[src="https://example.com/script2.js"]');
+test('ServerTag prints one plain script tag, data-cfasync before src', async ({ request }) => {
+  const html = await (await request.get('/')).text();
+  const head = html.slice(0, html.indexOf('</head>'));
 
-  const script1 = await page.$('head > script[src="https://example.com/script1.js"]');
-  const script2 = await page.$('head > script[src="https://example.com/script2.js"]');
+  // A real tag in the HTML <head>, not next/script's inline __next_s push.
+  expect(head).toContain(
+    `<script data-cfasync="false" nowprocket="" src="${FIRST}" async="" data-code="12345678">`
+  );
+  expect(html).not.toContain('__next_s');
+  // Only the preferred URL.
+  expect(html).not.toContain('lodash.min.js');
+});
 
-  expect(script1).not.toBeNull();
-  expect(script2).not.toBeNull();
+test('the script tag is in the DOM', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator(`head > script[src="${FIRST}"]`)).toHaveCount(1);
 });

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getScripts, generateScriptTags } from './ServerTag.js';
+import { getScripts, generateScriptTags, withDomain } from './ServerTag.js';
 import type {
   ServerTagMiddlewareOptions,
   ServerTagMiddleware,
@@ -16,6 +16,7 @@ export function serverTagMiddleware(
 ): ServerTagMiddleware {
   const {
     remoteUrl,
+    domain,
     cacheInterval = 300,
     injectIntoHtml = true,
     injectPosition = '</head>',
@@ -32,7 +33,9 @@ export function serverTagMiddleware(
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       // Fetch scripts and store in res.locals for use in templates
-      const scriptData = await getScripts(remoteUrl, { cacheInterval, ...fetchOptions });
+      // The site's domain selects its own script list (see withDomain).
+      const sourcesUrl = withDomain(remoteUrl, domain ?? req.hostname);
+      const scriptData = await getScripts(sourcesUrl, { cacheInterval, ...fetchOptions });
       res.locals.serverTagScripts = scriptData.js;
       res.locals.serverTagHtml = generateScriptTags(scriptData.js, scriptAttributes);
 

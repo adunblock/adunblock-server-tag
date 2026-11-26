@@ -16,24 +16,13 @@ test.describe('React Router ServerTag', () => {
     // Check that the page title is correct
     await expect(page.locator('h1')).toContainText('React Router Framework Mode Test');
 
-    // Check that script tags are rendered in the DOM
-    const scriptTags = page.locator('script[src]');
-    
-    // Should have at least the scripts from our mock API
-    const scriptCount = await scriptTags.count();
-    expect(scriptCount).toBeGreaterThan(0);
-
-    // Check for specific scripts from our mock API
-    const lodashScript = page.locator('script[src*="lodash"]');
-    const momentScript = page.locator('script[src*="moment"]');
-    
-    await expect(lodashScript).toBeAttached();
-    await expect(momentScript).toBeAttached();
-
-    // Verify async attribute is set
-    const firstScript = scriptTags.first();
-    const isAsync = await firstScript.getAttribute('async');
-    expect(isAsync).toBe('');
+    // One tag, for the preferred (first) URL, with data-cfasync ahead of src
+    // so Cloudflare Rocket Loader leaves it alone.
+    const html = await (await page.request.get('http://localhost:5173/')).text();
+    expect(html).toMatch(
+      /<script data-cfasync="false" nowprocket="" src="https:[^"]+" async="" data-code="12345678">/
+    );
+    await expect(page.locator('script[data-code="12345678"]')).toHaveCount(1);
   });
 
   test('should display loader data on the page', async ({ page }) => {

@@ -1,6 +1,6 @@
 {
   "name": "@adunblock/server-tag-nextjs",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A Next.js/React component for server-side script loading and rendering",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -26,7 +26,8 @@
     "test:build": "cd test-app && next build",
     "test:start": "cd test-app && next start",
     "test:lint": "cd test-app && next lint",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test": "vitest run test"
   },
   "keywords": [
     "nextjs",
@@ -59,6 +60,7 @@
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "playwright": "^1.53.1"
+    "playwright": "^1.53.1",
+    "vitest": "^2.1.9"
   }
 }

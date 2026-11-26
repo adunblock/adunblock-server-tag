@@ -8,6 +8,7 @@ export {
 export {
   getScripts,
   generateScriptTags,
+  withDomain,
   clearCache,
   getCacheSize,
 } from './ServerTag.js';

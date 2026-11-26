@@ -161,15 +161,32 @@ app.get('/custom', (req, res) => {
 });
 ```
 
+## The tag it prints
+
+By default the package prints one tag, for the first URL in the response (the preferred one):
+
+```html
+<script data-cfasync="false" nowprocket src="SCRIPT_URL" async data-code="ACCOUNT_ID"></script>
+```
+
+- `data-cfasync="false"` and `nowprocket` come **before** `src`: Cloudflare Rocket Loader skips a script only when `data-cfasync="false"` precedes `src`, and `nowprocket` keeps WP Rocket's Delay JavaScript Execution off it. Pass either with `false` to drop it.
+- Your attributes (`data-code` and anything else) come after `src`.
+- Only the first URL is rendered: the client must load once per page, since each copy runs its own adblock detection and asks for its own proxy session. A custom renderer still receives every URL.
+
+## The site's domain
+
+The middleware sends your site's domain to the sources endpoint as `?domain=`, taken from `req.hostname` (set `app.set('trust proxy', ...)` behind a proxy so it is the visitor-facing host), or from the `domain` option. When an ad blocker rule targets one site, we publish a new script host for that site alone, and only a request naming the site receives it. A `domain` parameter already in your URL is kept as it is.
+
 ## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `remoteUrl` | `string` | **Required** | URL to fetch script configuration from |
+| `domain` | `string` | `req.hostname` | Your site's domain, sent as `?domain=` |
 | `cacheInterval` | `number` | `300` | Cache duration in seconds |
 | `injectIntoHtml` | `boolean` | `true` | Auto-inject scripts into HTML responses |
 | `injectPosition` | `string` | `'</head>'` | Where to inject scripts in HTML |
-| `scriptAttributes` | `ScriptAttributes` | `{async: true}` | Additional attributes applied to every generated `<script>` tag (e.g. `data-code`) |
+| `scriptAttributes` | `ScriptAttributes` | `{async: true}` | Additional attributes for the generated `<script>` tag (e.g. `data-code`) |
 | `onError` | `function` | `undefined` | Custom error handler function |
 | `shouldInject` | `function` | `() => true` | Conditional injection logic |
 

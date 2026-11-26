@@ -59,7 +59,7 @@ In your Django template, load the `server_tag_tags` and use the `server_tag` tag
 
 ### Custom Script Attributes
 
-Pass a `script_attributes` dict from your view context to render extra attributes (including `data-*`) on every generated `<script>` tag:
+Pass a `script_attributes` dict from your view context to render extra attributes (including `data-*`) on the generated `<script>` tag:
 
 ```python
 # views.py
@@ -85,6 +85,22 @@ Rendering rules:
 - any other value → `key="value"` (HTML-escaped)
 
 By default, every rendered script includes `async`. Set `script_attributes={'async': False}` to disable it.
+
+### The tag it prints
+
+By default the package prints one tag, for the first URL in the response (the preferred one):
+
+```html
+<script data-cfasync="false" nowprocket src="SCRIPT_URL" async data-code="ACCOUNT_ID"></script>
+```
+
+- `data-cfasync="false"` and `nowprocket` come **before** `src`: Cloudflare Rocket Loader skips a script only when `data-cfasync="false"` precedes `src`, and `nowprocket` keeps WP Rocket's Delay JavaScript Execution off it. Pass either with `false` to drop it.
+- Your attributes (`data-code` and anything else) come after `src`.
+- Only the first URL is rendered: the client must load once per page, since each copy runs its own adblock detection and asks for its own proxy session. A custom renderer still receives every URL.
+
+### The site's domain
+
+The tag sends your site's domain to the sources endpoint as `?domain=`, taken from `request.get_host()` when the template context has the `request` (the `django.template.context_processors.request` context processor, on in new projects), or from a `domain` argument: `{% server_tag "https://public.adunblocker.com/api/vendor_scripts" domain="example.com" %}`. A host outside `ALLOWED_HOSTS` sends no domain. When an ad blocker rule targets one site, we publish a new script host for that site alone, and only a request naming the site receives it. A `domain` parameter already in your URL is kept as it is.
 
 ### Custom Rendering
 
